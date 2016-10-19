@@ -10,42 +10,42 @@ prefix_in = '0716_less_baz1ff_dish';
 batch_dish_0926(myDir, prefix_in)
 
 %--------------- 0820_fl_baz1_dish ---------------%
-myDir = 'C:\Users\public.wanglab-PC-11\Desktop\0820\fl_baz1';
+myDir = 'C:\YiwenShi\pengzhi\bead_binding_0907\0820\fl_baz1';
 prefix_in = '0820_fl_baz1_dish';
 batch_dish_0926(myDir, prefix_in)
 
 %--------------- 0820_fl_baz1ff_dish ---------------%
-myDir = 'C:\Users\public.wanglab-PC-11\Desktop\0820\fl_baz1ff';
+myDir = 'C:\YiwenShi\pengzhi\bead_binding_0907\0820\fl_baz1ff';
 prefix_in = '0820_fl_baz1ff_dish';
 batch_dish_0926(myDir, prefix_in)
 
 %--------------- 0820_less_baz1_dish ---------------%
-myDir = 'C:\Users\public.wanglab-PC-11\Desktop\0820\less_baz1';
+myDir = 'C:\YiwenShi\pengzhi\bead_binding_0907\0820\less_baz1';
 prefix_in = '0820_less_baz1_dish';
 batch_dish_0926(myDir, prefix_in)
 
 %--------------- 0820_less_baz1ff_dish ---------------%
-myDir = 'C:\Users\public.wanglab-PC-11\Desktop\0820\less_baz1ff';
+myDir = 'C:\YiwenShi\pengzhi\bead_binding_0907\0820\less_baz1ff';
 prefix_in = '0820_less_baz1ff_dish';
 batch_dish_0926(myDir, prefix_in)
 
 %--------------- 0824_fl_baz1_dish ---------------%
-myDir = 'C:\Users\public.wanglab-PC-11\Desktop\0824\fl_baz1';
+myDir = 'C:\YiwenShi\pengzhi\bead_binding_0907\0824\fl_baz1';
 prefix_in = '0824_fl_baz1_dish';
 batch_dish_0926(myDir, prefix_in)
 
 %--------------- 0824_fl_baz1ff_dish ---------------%
-myDir = 'C:\Users\public.wanglab-PC-11\Desktop\0824\fl_baz1ff';
+myDir = 'C:\YiwenShi\pengzhi\bead_binding_0907\0824\fl_baz1ff';
 prefix_in = '0824_fl_baz1ff_dish';
 batch_dish_0926(myDir, prefix_in)
 
 %--------------- 0824_less_baz1_dish ---------------%
-myDir = 'C:\Users\public.wanglab-PC-11\Desktop\0824\less_baz1';
+myDir = 'C:\YiwenShi\pengzhi\bead_binding_0907\0824\less_baz1';
 prefix_in = '0824_less_baz1_dish';
 batch_dish_0926(myDir, prefix_in)
 
 %--------------- 0824_less_baz1ff_dish ---------------%
-myDir = 'C:\Users\public.wanglab-PC-11\Desktop\0824\less_baz1ff';
+myDir = 'C:\YiwenShi\pengzhi\bead_binding_0907\0824\less_baz1ff';
 prefix_in = '0824_less_baz1ff_dish';
 batch_dish_0926(myDir, prefix_in)
 
