@@ -153,15 +153,17 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
         % figure(1); imagesc(im4);
 
         % whole cell average
-        wca = im4 .* mask1;
+        im5 = im4 .* mask1;
 
         if i <= time_frame(1)
             % before adding beads, only apply FRET mask
             % im6 = im4 .* mask1;
             % im6 = im4 .* mask;
-
-            continue;
-
+            im6 = im5;
+            
+            cell_sum = sum(sum(mask1));
+            bead_sum = 0;
+            percent(i) = bead_sum / cell_sum;
         else
             % after adding beads, apply FRET and DIC
             % im5 = im4 .* mask1;
@@ -171,6 +173,10 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
             % mask3, calculate from DIC ch, beads
             % for 0907 data
             mask3 = (im3 > 55000);
+            
+            cell_sum = sum(sum(mask1));
+            bead_sum = sum(sum(mask1 .* mask3));
+            percent(i) = bead_sum / cell_sum;
 
             % for 0929 data - 2nd attempt
             % l3 = graythresh(im3);
@@ -185,10 +191,10 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
             if tmp < 500
                 % intersection of 2 mask is too small
                 % im6 = im5;
-                im6 = wca;
+                im6 = im5;
             else
                 % im6 = im5 .* mask3;
-                im6 = wca .* (~mask3);
+                im6 = im5 .* (~mask3);
             end
 
         end
@@ -219,7 +225,7 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
         % calculated region
         figure(1); imagesc(im4 .* (im4 < th));
         figure(2); imagesc(im6 .* (im6 < th));
-        figure(3); imagesc(wca .* (wca < th));
+        figure(3); imagesc(im5 .* (im5 < th));
 
         % calculate ratio for this frame, with in the 90% threshold
         % im7 = im6 .* (im6 < th);
@@ -232,7 +238,7 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
         ratio_2(i) = tmp_ratio;
 
         % whole cell
-        im8 = wca .* (wca < th);
+        im8 = im5 .* (im5 < th);
         wca_ratio = sum(sum(im8)) / sum(sum(im8 > 0));
         ratio_3(i) = wca_ratio;
 
@@ -250,6 +256,8 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
 
         % close figures
         close(1); close(2); close(3);
+        
+
 
     end
 
@@ -260,10 +268,20 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
     % data.delta  = max(ratio(time_frame(2) : length(ratio))) - data.basal;
     % data.delta_ratio = data.delta / data.basal;
 
-    data = load([posDir, '/data.mat']);
+    load([posDir, '/data.mat']);
 
+    data.time_2 = [1 : length(ratio_2)] - time_frame(1);
+    
     data.ratio_2 = ratio_2;
     data.ratio_3 = ratio_3;
+        
+    data.delta_2  = max(ratio_2(time_frame(2) : length(ratio_2))) - data.basal;
+    data.delta_ratio_2 = data.delta_2 / data.basal;
+    
+    data.delta_3  = max(ratio_3(time_frame(2) : length(ratio_3))) - data.basal;
+    data.delta_ratio_3 = data.delta_3 / data.basal;
+    
+    data.percent = percent;    
 
     save([posDir, '/data.mat'], 'data');
 end
