@@ -76,17 +76,17 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
     ch2_file = dir(fullfile(posDir, '*CFP*'));
     ch3_file = dir(fullfile(posDir, '*DIC*'));
 
-    % % dir for mask file, for 0907
-    % maskDir = fullfile(posDir, 'output');
-    % tmp_file = dir(fullfile(maskDir, '*-*'));
-    %
-    % for i = 1 : length(tmp_file)
-    %     if(tmp_file(i).isdir)
-    %         maskDir = [maskDir, '\', tmp_file(i).name];
-    %         mask_file = dir(fullfile(maskDir, '*ratio*'));
-    %         break;
-    %     end
-    % end
+    % dir for mask file, for 0907
+    maskDir = fullfile(posDir, 'output');
+    tmp_file = dir(fullfile(maskDir, '*-*'));
+
+    for i = 1 : length(tmp_file)
+        if(tmp_file(i).isdir)
+            maskDir = [maskDir, '\', tmp_file(i).name];
+            mask_file = dir(fullfile(maskDir, '*ratio*'));
+            break;
+        end
+    end
 
     for i = 1 : length(ch1_file)
 
@@ -122,13 +122,13 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
         im3 = imread(fullfile(posDir, ch3_file(cur_idx).name));
 
         % % mask for 0929 data
-        % ratio_image = imread(fullfile(maskDir, mask_file(cur_idx).name));
-        % ratio_gray = rgb2gray(ratio_image);
-        % mask = bwareaopen(ratio_gray, 100);
+        ratio_image = imread(fullfile(maskDir, mask_file(cur_idx).name));
+        ratio_gray = rgb2gray(ratio_image);
+        mask1 = bwareaopen(ratio_gray, 100);
 
         % mask1, calculate from FRET ch, whole cell
-        l1 = graythresh(im1);
-        mask1 = im2bw(im1, l1);
+        % l1 = graythresh(im1);
+        % mask1 = im2bw(im1, l1);
 
         % subtract background
         % Using same method as in fluocell, preprocess.m, line 36
@@ -160,7 +160,7 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
             % im6 = im4 .* mask1;
             % im6 = im4 .* mask;
             im6 = im5;
-            
+
             cell_sum = sum(sum(mask1));
             bead_sum = 0;
             percent(i) = bead_sum / cell_sum;
@@ -173,7 +173,7 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
             % mask3, calculate from DIC ch, beads
             % for 0907 data
             mask3 = (im3 > 55000);
-            
+
             cell_sum = sum(sum(mask1));
             bead_sum = sum(sum(mask1 .* mask3));
             percent(i) = bead_sum / cell_sum;
@@ -256,7 +256,7 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
 
         % close figures
         close(1); close(2); close(3);
-        
+
 
 
     end
@@ -271,17 +271,17 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
     load([posDir, '/data.mat']);
 
     data.time_2 = [1 : length(ratio_2)] - time_frame(1);
-    
+
     data.ratio_2 = ratio_2;
     data.ratio_3 = ratio_3;
-        
+
     data.delta_2  = max(ratio_2(time_frame(2) : length(ratio_2))) - data.basal;
     data.delta_ratio_2 = data.delta_2 / data.basal;
-    
+
     data.delta_3  = max(ratio_3(time_frame(2) : length(ratio_3))) - data.basal;
     data.delta_ratio_3 = data.delta_3 / data.basal;
-    
-    data.percent = percent;    
+
+    data.percent = percent;
 
     save([posDir, '/data.mat'], 'data');
 end
