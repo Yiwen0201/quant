@@ -1,0 +1,14 @@
+plot_batch_0927
+plot_dish_0927
+
+batch_1018
+
+batch_dish_0926
+
+quant_pos_1018: add DIC mask for 0929 data
+quant_pos_1010: avg whole cell for 0929 data 
+quant_pos_1008: for 0907 data
+
+quant_pos: whole cell avg & whole cell exclude beads region
+
+quant_dish
