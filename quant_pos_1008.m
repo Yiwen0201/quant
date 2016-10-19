@@ -3,11 +3,11 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
     % check input info
     if nargin < 1
         prompt = {'Prefix of this position: ', 'Enter frame1: ', 'Enter frame2: ',...
-                  'Define idx_pattern: ', 'Define idx_postfix: '};    
-        dlg_title = 'Input';    
+                  'Define idx_pattern: ', 'Define idx_postfix: '};
+        dlg_title = 'Input';
         num_lines = 1;
         defaultans = {'date_info_dish_pos','8','9', 't\d', '.TIF'};
-        answer = inputdlg(prompt,dlg_title,num_lines,defaultans);  
+        answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
 
         prefix = answer{1};
 
@@ -21,11 +21,11 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
         posDir = uigetdir;
     elseif nargin == 1
         prompt = {'Enter frame1: ', 'Enter frame2: ',...
-                  'Define idx_pattern: ', 'Define idx_postfix: '};    
-        dlg_title = 'Input';    
+                  'Define idx_pattern: ', 'Define idx_postfix: '};
+        dlg_title = 'Input';
         num_lines = 1;
         defaultans = {'8','9', 't\d', '.TIF'};
-        answer = inputdlg(prompt,dlg_title,num_lines,defaultans);  
+        answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
 
         frame1 = str2num(answer{1});
         frame2 = str2num(answer{2});
@@ -36,11 +36,11 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
 
         posDir = uigetdir;
     elseif nargin == 2
-        prompt = {'Define idx_pattern: ', 'Define idx_postfix: '};    
-        dlg_title = 'Input';    
+        prompt = {'Define idx_pattern: ', 'Define idx_postfix: '};
+        dlg_title = 'Input';
         num_lines = 1;
         defaultans = {'t\d', '.TIF'};
-        answer = inputdlg(prompt,dlg_title,num_lines,defaultans);  
+        answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
 
         idx_pattern = answer{1};
         idx_postfix = answer{2};
@@ -48,10 +48,10 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
         posDir = uigetdir;
     elseif nargin == 3
         prompt = {'Define idx_postfix: '};
-        dlg_title = 'Input';    
+        dlg_title = 'Input';
         num_lines = 1;
         defaultans = {'.TIF'};
-        answer = inputdlg(prompt,dlg_title,num_lines,defaultans);  
+        answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
 
         idx_postfix = answer{1};
 
@@ -117,7 +117,7 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
         % Using same method as in fluocell, preprocess.m, line 36
         bg_file = fullfile(posDir, 'output/background.mat');
 
-        % subtract background for im1        
+        % subtract background for im1
         bg_bw = get_background_0926(im1, bg_file, 'method', 'auto');
         bw = double(bg_bw);
         bg_value = sum(sum(double(im1) .* bw)) / sum(sum(bw));
@@ -134,8 +134,8 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
         % calculate intensity
         im4 = (double(im1_sub) + shift) ./ (double(im2_sub) + shift);
         % figure(1); imagesc(im4);
-        
-        if i <= time_frame(1) 
+
+        if i <= time_frame(1)
             % before adding beads, only apply FRET mask
             im6 = im4 .* mask1;
 
@@ -143,9 +143,9 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
             % after adding beads, apply FRET and DIC
             im5 = im4 .* mask1;
 
-            % mask3, calculate from DIC ch, beads 
-            % mask3 = (im3 > 55000);
-            mask3 = (im3 > 40000);
+            % mask3, calculate from DIC ch, beads
+            mask3 = (im3 > 55000); % for 0907 cell sample
+            % mask3 = (im3 > 40000); 
 
             tmp = sum(sum(mask1 .* mask3));
 
@@ -153,8 +153,8 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
                 % intersection of 2 mask is too small
                 im6 = im5;
             else
-                im6 = im5 .* mask3;            
-            end        
+                im6 = im5 .* mask3;
+            end
 
         end
 
@@ -166,16 +166,16 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
             % more than 90% valid pixels with ratio < 5.0
             thl = 0.0;
             thr = 5.0;
-            th  = (thl + thr) / 2.0; 
+            th  = (thl + thr) / 2.0;
             tmp = sum(sum(im6 < th & im6 > 0)) / sum(sum(im6 > 0));
 
-            while tmp < 0.9            
+            while tmp < 0.9
                 thl = th;
                 th  = (thl + thr) / 2.0;
                 tmp = sum(sum(im6 < th & im6 > 0)) / sum(sum(im6 > 0));
             end
         end
-        
+
 
 
         % calculated region
