@@ -82,7 +82,11 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
 
     for i = 1 : length(tmp_file)
         if(tmp_file(i).isdir)
-            maskDir = [maskDir, '\', tmp_file(i).name];
+            tmp_maskDir = [maskDir, '\', tmp_file(i).name];
+            if(length(dir(fullfile(tmp_maskDir, '*ratio*'))) < length(ch1_file))
+                continue;
+            end
+            maskDir = tmp_maskDir;
             mask_file = dir(fullfile(maskDir, '*ratio*'));
             break;
         end
@@ -172,15 +176,15 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
 
             % mask3, calculate from DIC ch, beads
             % for 0907 data
-            mask3 = (im3 > 55000);
-
+            % mask3 = (im3 > 55000);
+            
+            % for 0929 data - 2nd attempt
+            l3 = graythresh(im3);
+            mask3 = im2bw(im3, l3);
+            
             cell_sum = sum(sum(mask1));
             bead_sum = sum(sum(mask1 .* mask3));
             percent(i) = bead_sum / cell_sum;
-
-            % for 0929 data - 2nd attempt
-            % l3 = graythresh(im3);
-            % mask3 = im2bw(im3, l3);
 
             % tmp = sum(sum(mask1 .* mask3));
             % tmp = sum(sum(mask .* mask3));
