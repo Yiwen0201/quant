@@ -8,6 +8,7 @@ batch_dish_0926
 quant_pos_1018: add DIC mask for 0929 data
 quant_pos_1010: avg whole cell for 0929 data 
 quant_pos_1008: for 0907 data
+quant_pos_1101: non beads and whole cell with th = 5
 
 quant_pos: whole cell avg & whole cell exclude beads region
 
