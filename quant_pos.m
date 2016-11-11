@@ -66,11 +66,13 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
     shift = 1e-4;
 
     % intensity image, calculation region image
-    outDir = fullfile(posDir, 'calculate_region');
+    outDir = fullfile(posDir, 'calculate_ver3');
     if ~exist(outDir)
         mkdir(outDir);
     end
-
+    
+    copyfile(fullfile(posDir, 'data.mat'), fullfile(posDir, 'calculate_ver3'));
+    
     % Get filename for ch1, ch2, ch3
     ch1_file = dir(fullfile(posDir, '*FRET*'));
     ch2_file = dir(fullfile(posDir, '*CFP*'));
@@ -102,7 +104,10 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
 
         % get idx for this time frame
         idx1 = regexp(mask_file(i).name, idx_pattern);
-        idx2 = regexp(mask_file(i).name, '.tiff');
+        idx2 = regexp(mask_file(i).name, '.TIF');
+        if ~exist(idx2)
+            idx2 = regexp(mask_file(i).name, '.tiff');
+        end
 
         idx = mask_file(i).name(idx1+1 : idx2-1);
         idx = str2num(idx);
@@ -353,6 +358,8 @@ function data = quant_pos(prefix, time_frame, idx_pattern, idx_postfix, posDir)
     data.percent = percent;
     data.info = prefix;
     data.path = posDir;
+    
+    
 
     save([posDir, '/data.mat'], 'data');
 end
